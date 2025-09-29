@@ -1,0 +1,349 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <h1 class="hero-title">
+            <img src="/static/nasa-logo.png" alt="NASA Logo" height="60" class="me-3">
+            Discover New Worlds
+        </h1>
+        <p class="hero-subtitle">
+            AI-powered exoplanet classification using NASA's comprehensive dataset
+        </p>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <p class="lead">
+                    Our platform combines machine learning algorithms with NASA's exoplanet archive data 
+                    to classify planetary candidates as confirmed planets, candidates, or false positives.
+                </p>
+                <div class="mt-4">
+                    <a href="/predict" class="btn btn-nasa btn-lg me-3">
+                        <i class="fas fa-search me-2"></i>Predict Exoplanet
+                    </a>
+                    <a href="/upload" class="btn btn-outline-light btn-lg me-3">
+                        <i class="fas fa-upload me-2"></i>Upload Data
+                    </a>
+                    <a href="/dashboard" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-chart-line me-2"></i>View Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-12">
+                <h2 class="mb-4">Platform Features</h2>
+                <p class="lead">Advanced AI capabilities for exoplanet discovery and analysis</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-brain fa-3x text-primary mb-3"></i>
+                        <h5 class="card-title">Machine Learning Classification</h5>
+                        <p class="card-text">
+                            Advanced ML algorithms trained on NASA data to classify exoplanets 
+                            as confirmed, candidate, or false positive.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-upload fa-3x text-success mb-3"></i>
+                        <h5 class="card-title">Batch Data Processing</h5>
+                        <p class="card-text">
+                            Upload CSV files with planetary data for bulk classification 
+                            and analysis with downloadable results.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-chart-line fa-3x text-warning mb-3"></i>
+                        <h5 class="card-title">Real-time Analytics</h5>
+                        <p class="card-text">
+                            Comprehensive dashboard with model performance metrics, 
+                            feature importance, and data visualizations.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-cogs fa-3x text-info mb-3"></i>
+                        <h5 class="card-title">Hyperparameter Tuning</h5>
+                        <p class="card-text">
+                            Fine-tune model parameters through the web interface 
+                            to optimize classification accuracy.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-robot fa-3x text-danger mb-3"></i>
+                        <h5 class="card-title">AI Explanations</h5>
+                        <p class="card-text">
+                            Get detailed scientific explanations for predictions 
+                            using our trained NASA Planet Expert LLM.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-sync-alt fa-3x text-secondary mb-3"></i>
+                        <h5 class="card-title">Continuous Learning</h5>
+                        <p class="card-text">
+                            Models automatically retrain with new data to improve 
+                            accuracy and adapt to new discoveries.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Model Status Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-4">
+                <h2>Model Status</h2>
+                <p class="lead">Current status of our trained machine learning models</p>
+            </div>
+        </div>
+        
+        <div class="row" id="modelStatus">
+            <div class="col-12 text-center">
+                <div class="loading">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Loading model status...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Stats Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-4">
+                <h2>Platform Statistics</h2>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-3 mb-4">
+                <div class="metric-card">
+                    <div class="metric-value" id="totalModels">-</div>
+                    <div class="metric-label">Trained Models</div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-4">
+                <div class="metric-card">
+                    <div class="metric-value" id="avgAccuracy">-</div>
+                    <div class="metric-label">Average Accuracy</div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-4">
+                <div class="metric-card">
+                    <div class="metric-value" id="dataPoints">10,000+</div>
+                    <div class="metric-label">Training Records</div>
+                </div>
+            </div>
+            
+            <div class="col-md-3 mb-4">
+                <div class="metric-card">
+                    <div class="metric-value" id="missions">3</div>
+                    <div class="metric-label">NASA Missions</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Getting Started Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center mb-4">
+                <h2>Getting Started</h2>
+                <p class="lead">Ready to discover new exoplanets? Here's how to get started:</p>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <span class="fw-bold">1</span>
+                            </div>
+                            <h5 class="card-title mb-0 ms-3">Input Data</h5>
+                        </div>
+                        <p class="card-text">
+                            Enter planetary parameters manually or upload a CSV file with 
+                            orbital period, planetary radius, stellar temperature, and other key metrics.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <span class="fw-bold">2</span>
+                            </div>
+                            <h5 class="card-title mb-0 ms-3">AI Classification</h5>
+                        </div>
+                        <p class="card-text">
+                            Our trained models analyze the data and classify each candidate 
+                            as a confirmed planet, planetary candidate, or false positive.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="bg-warning text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                <span class="fw-bold">3</span>
+                            </div>
+                            <h5 class="card-title mb-0 ms-3">Get Results</h5>
+                        </div>
+                        <p class="card-text">
+                            Receive detailed predictions with confidence scores, 
+                            scientific explanations, and downloadable results.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    loadModelStatus();
+});
+
+async function loadModelStatus() {
+    try {
+        const status = await apiCall('/api/models/status');
+        displayModelStatus(status);
+        updateStatistics(status);
+    } catch (error) {
+        console.error('Error loading model status:', error);
+        showAlert('Failed to load model status', 'warning');
+    }
+}
+
+function displayModelStatus(status) {
+    const container = document.getElementById('modelStatus');
+    
+    if (status.status === 'no_models' || status.models.length === 0) {
+        container.innerHTML = `
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                No trained models available. Please retrain models first.
+            </div>
+        `;
+        return;
+    }
+    
+    const modelsHtml = status.models.map(model => `
+        <div class="col-md-6 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="card-title mb-0">${model.name}</h6>
+                        <span class="badge ${model.available ? 'bg-success' : 'bg-secondary'}">
+                            ${model.available ? 'Available' : 'Training'}
+                        </span>
+                    </div>
+                    <div class="mt-2">
+                        <small class="text-muted">Accuracy: ${(model.accuracy * 100).toFixed(1)}%</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    
+    container.innerHTML = `
+        <div class="row">
+            ${modelsHtml}
+        </div>
+        <div class="text-center mt-3">
+            <button class="btn btn-nasa" onclick="retrainModels()">
+                <i class="fas fa-sync-alt me-2"></i>Retrain Models
+            </button>
+        </div>
+    `;
+}
+
+function updateStatistics(status) {
+    document.getElementById('totalModels').textContent = status.models.length;
+    
+    if (status.models.length > 0) {
+        const avgAccuracy = status.models.reduce((sum, model) => sum + model.accuracy, 0) / status.models.length;
+        document.getElementById('avgAccuracy').textContent = (avgAccuracy * 100).toFixed(1) + '%';
+    }
+}
+
+async function retrainModels() {
+    const button = event.target;
+    const originalText = button.innerHTML;
+    
+    button.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Retraining...';
+    button.disabled = true;
+    
+    try {
+        const result = await apiCall('/api/retrain', { method: 'GET' });
+        showAlert('Models retrained successfully!', 'success');
+        loadModelStatus(); // Refresh the status
+    } catch (error) {
+        showAlert('Failed to retrain models: ' + error.message, 'danger');
+    } finally {
+        button.innerHTML = originalText;
+        button.disabled = false;
+    }
+}
+</script>
+{% endblock %}
+
