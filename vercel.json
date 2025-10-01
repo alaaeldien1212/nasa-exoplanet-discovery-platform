@@ -1,16 +1,23 @@
 {
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
   "functions": {
     "app/api/predict/route.ts": {
+      "runtime": "nodejs18.x"
+    },
+    "app/api/upload/route.ts": {
+      "runtime": "nodejs18.x"
+    },
+    "app/api/ai-description/route.ts": {
       "runtime": "nodejs18.x"
     }
   },
   "env": {
     "PYTHON_PATH": "/usr/bin/python3"
+  },
+  "build": {
+    "env": {
+      "PYTHON_PATH": "/usr/bin/python3"
+    }
   }
 }

@@ -14,6 +14,14 @@ interface UploadResult {
     classification: string
     confidence: number
     features: any
+    database_match?: {
+      planet_name?: string
+      status?: string
+      mission?: string
+      db_confidence?: number
+      is_known_planet: boolean
+    }
+    ai_description?: string
   }>
   summary: {
     exoplanets: number
