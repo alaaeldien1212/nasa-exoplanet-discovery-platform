@@ -1,8 +1,0 @@
-{
-  "total_examples": 10446,
-  "unique_planets": 10446,
-  "avg_output_length": 75.77666092284127,
-  "instruction_types": {
-    "planet_description": 10446
-  }
-}

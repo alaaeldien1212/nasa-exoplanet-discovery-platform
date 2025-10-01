@@ -1,237 +1,94 @@
-# 🪐 NASA Space Apps Challenge 2025 - Exoplanet Discovery Platform
+# NASA Exoplanet AI Detection Platform
 
-## Challenge #2: AI/ML Model for Exoplanet Discovery
+A Next.js application for AI-powered exoplanet detection using NASA datasets.
 
-**Team:** NASA Exoplanet Discovery Platform Development Team  
-**Event:** 2025 NASA Space Apps Challenge  
-**Difficulty:** Advanced  
-**Subjects:** Artificial Intelligence & Machine Learning, Data Analysis, Data Visualization, Software
+## Features
 
----
+- **AI-Powered Detection**: Machine learning models trained on NASA Kepler, K2, and TESS data
+- **Real-time Analysis**: Upload transit data and get instant exoplanet classification
+- **High Accuracy**: 83%+ accuracy on test data
+- **Modern UI**: Black and white high-contrast design optimized for accessibility
+- **Vercel Ready**: Configured for seamless deployment
 
-## 🚀 Project Overview
+## Tech Stack
 
-An advanced AI-powered platform for exoplanet classification and discovery, combining machine learning algorithms with NASA's comprehensive exoplanet datasets to classify planetary candidates as confirmed planets, candidates, or false positives.
+- **Frontend**: Next.js 14, React, TypeScript, Tailwind CSS
+- **Backend**: Python, scikit-learn, pandas
+- **ML Models**: Random Forest, Gradient Boosting
+- **Data**: NASA Kepler, K2, and TESS datasets
 
-### 🏆 **Key Achievement: 86.15% Cross-Validation Accuracy**
+## Getting Started
 
----
+### Prerequisites
 
-## ✨ Features
-
-### 🤖 **Machine Learning Classification**
-- **Multiple ML Models**: Gradient Boosting, Random Forest, Extra Trees, SVM, Histogram GB
-- **Advanced Preprocessing**: Feature engineering, outlier detection, class imbalance handling
-- **Ensemble Methods**: Voting classifier with 5 high-performance models
-- **Real-time Predictions**: Instant classification of planetary candidates
-
-### 🌐 **Interactive Web Interface**
-- **Manual Prediction**: Input planetary parameters for single predictions
-- **Batch Processing**: Upload CSV files for bulk classification
-- **Drag & Drop**: Easy file upload with validation
-- **Responsive Design**: Works on desktop, tablet, and mobile
-
-### 📊 **Analytics Dashboard**
-- **Model Performance**: Accuracy metrics and comparison charts
-- **Feature Importance**: Understanding which parameters matter most
-- **Data Visualization**: Interactive charts and distributions
-- **Real-time Monitoring**: Live model status and performance tracking
-
-### 🧠 **AI Explanations**
-- **NASA Planet Expert LLM**: Trained on NASA data for scientific explanations
-- **Detailed Insights**: Why a classification was made
-- **Educational Content**: Learning about exoplanet science
-- **Confidence Scoring**: Probability distributions for predictions
-
----
-
-## 📊 **Performance Metrics**
-
-### **Model Performance**
-- **Cross-Validation Accuracy**: 86.15%
-- **Test Accuracy**: 79.54%
-- **Training Data**: 21,267 exoplanet records
-- **Features**: 42 planetary parameters
-- **Processing Speed**: < 1 second per prediction
-
-### **Data Coverage**
-- **NASA Missions**: Kepler, K2, TESS
-- **Training Records**: 21,267 exoplanet observations
-- **Feature Dimensions**: 42 parameters
-- **Classification Types**: 3 categories (CONFIRMED, CANDIDATE, FALSE_POSITIVE)
-
----
-
-## 🚀 **Quick Start**
-
-### **Prerequisites**
+- Node.js 18+
 - Python 3.8+
-- NASA exoplanet data files
-- Ollama (optional, for AI explanations)
+- pip
 
-### **Installation**
+### Installation
 
-1. **Clone the repository**
+1. Clone the repository
+2. Install dependencies:
    ```bash
-   git clone https://github.com/rhythmlab/nasa-exoplanet-discovery-platform.git
-   cd nasa-exoplanet-discovery-platform
-   ```
-
-2. **Install dependencies**
-   ```bash
+   npm install
    pip install -r requirements.txt
    ```
 
-3. **Start the platform**
+3. Prepare data and train models:
    ```bash
-   python start_platform.py
+   python scripts/prepare_data.py
+   python scripts/train_model.py
    ```
 
-4. **Open your browser**
-   ```
-   http://localhost:8000
+4. Run the development server:
+   ```bash
+   npm run dev
    ```
 
----
-
-## 📁 **Project Structure**
+## Project Structure
 
 ```
-nasa-exoplanet-discovery-platform/
-├── app.py                      # FastAPI web application
-├── final_high_accuracy_classifier.py  # ML classifier (86.15% accuracy)
-├── start_platform.py           # Platform startup script
-├── requirements.txt            # Python dependencies
-├── README.md                   # This file
-├── NASA_Space_Apps_Challenge_2_Submission_Report.md  # Submission report
-├── templates/                  # HTML templates
-│   ├── base.html              # Base template
-│   ├── index.html             # Home page
-│   ├── predict.html           # Prediction interface
-│   ├── upload.html            # Data upload interface
-│   └── dashboard.html         # Analytics dashboard
-├── static/                     # Static files (CSS, JS)
-│   └── nasa-logo.png          # NASA logo
-└── nasa-planet-llm-training/   # AI explanation system
-    ├── ollama_training_script.py
-    └── training_data/
+├── app/                    # Next.js app directory
+│   ├── api/               # API routes
+│   ├── dashboard/          # Model dashboard page
+│   ├── predict/            # Prediction interface
+│   └── page.tsx            # Home page
+├── scripts/                # Python scripts
+│   ├── prepare_data.py     # Data preprocessing
+│   ├── train_model.py      # Model training
+│   ├── predict.py          # Prediction script
+│   └── model_info.py       # Model information
+├── lib/                    # Python libraries
+│   └── predictor.py        # Prediction class
+├── models/                 # Trained models
+├── data/                   # Processed datasets
+└── nasa data planet/      # Original NASA datasets
 ```
 
----
+## API Endpoints
 
-## 🎯 **Usage**
+- `GET /api/predict` - Get model information
+- `POST /api/predict` - Make exoplanet prediction
 
-### **Manual Prediction**
-1. Navigate to **Predict** page
-2. Enter planetary parameters:
-   - Orbital Period (days)
-   - Planetary Radius (Earth radii)
-   - Stellar Temperature (K)
-   - Stellar Radius (Solar radii)
-   - Stellar Mass (Solar masses)
-   - Distance (parsecs)
-3. Select ML model
-4. Click "Classify Exoplanet"
-5. View results with confidence scores and explanations
+## Deployment
 
-### **Batch Processing**
-1. Navigate to **Upload** page
-2. Upload CSV file with planetary data
-3. Select ML model and processing options
-4. Download results with classifications
+The project is configured for Vercel deployment:
 
-### **Analytics Dashboard**
-1. Navigate to **Dashboard** page
-2. View model performance metrics
-3. Analyze feature importance
-4. Perform hyperparameter tuning
-5. Monitor data distributions
+1. Connect your GitHub repository to Vercel
+2. Deploy automatically on push to main branch
+3. Environment variables are handled automatically
 
----
+## Model Performance
 
-## 🔬 **Scientific Applications**
+- **Training Samples**: 7,809 exoplanet candidates
+- **Test Accuracy**: 83.23%
+- **Features**: 15 key astronomical parameters
+- **Data Sources**: Kepler, K2, and TESS missions
 
-### **Research Use Cases**
-- **Planetary Discovery**: Classify new exoplanet candidates
-- **Data Validation**: Verify existing classifications
-- **Mission Planning**: Prioritize follow-up observations
-- **Statistical Analysis**: Understand planetary populations
+## Contributing
 
-### **Educational Applications**
-- **Student Projects**: Learn exoplanet science through AI
-- **Research Training**: Understand ML in astronomy
-- **Data Analysis**: Practice with real NASA datasets
-- **Scientific Method**: Hypothesis testing with AI
+This project was created for the 2025 NASA Space Apps Challenge. Contributions are welcome!
 
-### **Professional Tools**
-- **Observatory Operations**: Rapid candidate screening
-- **Grant Proposals**: Demonstrate discovery potential
-- **Publication Support**: Statistical validation of results
-- **Collaboration**: Share standardized classifications
+## License
 
----
-
-## 🛠️ **API Endpoints**
-
-### **Prediction**
-- `POST /api/predict` - Manual prediction
-- `POST /api/upload` - Batch prediction
-- `GET /api/models/status` - Model status
-
-### **Analytics**
-- `GET /api/model-performance` - Performance metrics
-- `GET /api/feature-importance` - Feature analysis
-- `POST /api/hyperparameter-tuning` - Model optimization
-
-### **Management**
-- `GET /api/retrain` - Retrain models
-- `GET /download/{filename}` - Download results
-- `GET /api/llm/explain` - AI explanations
-
----
-
-## 📚 **References**
-
-### **NASA Data Sources**
-- [NASA Exoplanet Archive](https://exoplanetarchive.ipac.caltech.edu/)
-- [Kepler Mission](https://www.nasa.gov/mission_pages/kepler/main/)
-- [TESS Mission](https://tess.mit.edu/)
-- [K2 Mission](https://www.nasa.gov/feature/ames/kepler/k2-mission)
-
-### **Scientific Papers**
-- "The Exoplanet Archive: Data and Tools for Exoplanet Research"
-- "Machine Learning for Exoplanet Classification"
-- "Transit Detection and Characterization"
-
----
-
-## 🏆 **Challenge Requirements Met**
-
-✅ **AI/ML Model Trained on NASA Data** - 86.15% accuracy achieved  
-✅ **Data Analysis for New Planet Identification** - Comprehensive feature engineering  
-✅ **Web Interface for User Interaction** - Full-featured web application  
-✅ **Bonus Features**: Batch processing, model monitoring, AI explanations
-
----
-
-## 📄 **License**
-
-This project uses NASA's publicly available exoplanet data. Please refer to NASA's data usage policies for commercial applications.
-
----
-
-## 🆘 **Support**
-
-### **Getting Help**
-- Check the submission report: `NASA_Space_Apps_Challenge_2_Submission_Report.md`
-- Review the platform summary: `PLATFORM_SUMMARY.md`
-- Open an issue on GitHub
-- Contact the development team
-
----
-
-**Happy Planet Hunting! 🪐✨**
-
-*Built with ❤️ for the exoplanet discovery community*
-
-**Ready for NASA Space Apps Challenge Submission!**
+MIT License - see LICENSE file for details.

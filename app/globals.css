@@ -1,0 +1,346 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 0%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 0%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 20%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 70%;
+    --accent: 0 0% 20%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 100%;
+    --radius: 0.5rem;
+    
+    /* Font variables */
+    --font-cairo: 'Cairo', 'Noto Sans Arabic', 'Amiri', 'Scheherazade New', 'Segoe UI', 'Tahoma', 'Arial', sans-serif;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* RTL Support */
+  [dir="rtl"] {
+    direction: rtl;
+    font-family: var(--font-cairo), 'Cairo', 'Noto Sans Arabic', 'Segoe UI', 'Tahoma', 'Arial', sans-serif !important;
+  }
+  
+  /* Apply Arabic font to all RTL elements */
+  [dir="rtl"] * {
+    font-family: var(--font-cairo), 'Cairo', 'Noto Sans Arabic', 'Segoe UI', 'Tahoma', 'Arial', sans-serif !important;
+  }
+  
+  /* Specific Arabic font for Arabic text */
+  .arabic-text {
+    font-family: var(--font-cairo), 'Cairo', 'Noto Sans Arabic', 'Segoe UI', 'Tahoma', 'Arial', sans-serif !important;
+  }
+  
+  /* Force Arabic font on all text in RTL mode */
+  [dir="rtl"] h1,
+  [dir="rtl"] h2,
+  [dir="rtl"] h3,
+  [dir="rtl"] h4,
+  [dir="rtl"] h5,
+  [dir="rtl"] h6,
+  [dir="rtl"] p,
+  [dir="rtl"] span,
+  [dir="rtl"] div,
+  [dir="rtl"] button,
+  [dir="rtl"] a {
+    font-family: var(--font-cairo), 'Cairo', 'Noto Sans Arabic', 'Segoe UI', 'Tahoma', 'Arial', sans-serif !important;
+  }
+  
+  /* Ensure Arabic font loads */
+  @font-face {
+    font-family: 'Cairo';
+    font-display: swap;
+  }
+  
+  /* RTL spacing fixes */
+  [dir="rtl"] .space-x-2 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-x-reverse: 1;
+    margin-right: calc(0.5rem * var(--tw-space-x-reverse));
+    margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
+  }
+  
+  [dir="rtl"] .space-x-3 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-x-reverse: 1;
+    margin-right: calc(0.75rem * var(--tw-space-x-reverse));
+    margin-left: calc(0.75rem * calc(1 - var(--tw-space-x-reverse)));
+  }
+  
+  [dir="rtl"] .space-x-4 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-x-reverse: 1;
+    margin-right: calc(1rem * var(--tw-space-x-reverse));
+    margin-left: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
+  }
+  
+  [dir="rtl"] .space-x-6 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-x-reverse: 1;
+    margin-right: calc(1.5rem * var(--tw-space-x-reverse));
+    margin-left: calc(1.5rem * calc(1 - var(--tw-space-x-reverse)));
+  }
+  
+  [dir="rtl"] .space-x-8 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-x-reverse: 1;
+    margin-right: calc(2rem * var(--tw-space-x-reverse));
+    margin-left: calc(2rem * calc(1 - var(--tw-space-x-reverse)));
+  }
+  
+  /* RTL margin fixes */
+  [dir="rtl"] .mr-2 {
+    margin-right: 0;
+    margin-left: 0.5rem;
+  }
+  
+  [dir="rtl"] .mr-3 {
+    margin-right: 0;
+    margin-left: 0.75rem;
+  }
+  
+  [dir="rtl"] .ml-2 {
+    margin-left: 0;
+    margin-right: 0.5rem;
+  }
+  
+  [dir="rtl"] .ml-3 {
+    margin-left: 0;
+    margin-right: 0.75rem;
+  }
+  
+  /* RTL padding fixes */
+  [dir="rtl"] .pl-4 {
+    padding-left: 0;
+    padding-right: 1rem;
+  }
+  
+  [dir="rtl"] .pr-4 {
+    padding-right: 0;
+    padding-left: 1rem;
+  }
+  
+  /* RTL text alignment */
+  [dir="rtl"] .text-left {
+    text-align: right;
+  }
+  
+  [dir="rtl"] .text-right {
+    text-align: left;
+  }
+  
+  /* RTL flex direction fixes */
+  [dir="rtl"] .flex-row {
+    flex-direction: row-reverse;
+  }
+  
+  /* RTL justify fixes */
+  [dir="rtl"] .justify-start {
+    justify-content: flex-end;
+  }
+  
+  [dir="rtl"] .justify-end {
+    justify-content: flex-start;
+  }
+  
+  /* RTL space-x-reverse support */
+  [dir="rtl"] .space-x-reverse > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-x-reverse: 1;
+  }
+  
+  /* RTL specific icon spacing */
+  [dir="rtl"] .icon-text-spacing {
+    margin-right: 0.5rem;
+    margin-left: 0;
+  }
+  
+  /* RTL gradient fixes */
+  [dir="rtl"] .gradient-text {
+    background: linear-gradient(to left, #ffffff, #d1d5db);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  /* RTL transform fixes */
+  [dir="rtl"] .transform {
+    transform: scaleX(-1);
+  }
+  
+  [dir="rtl"] .transform .text-content {
+    transform: scaleX(-1);
+  }
+  
+  /* RTL floating navigation positioning */
+  [dir="rtl"] .floating-nav {
+    direction: ltr; /* Keep navigation items in LTR order */
+  }
+  
+  [dir="rtl"] .floating-nav .nav-item {
+    direction: ltr; /* Keep individual nav items in LTR */
+  }
+  
+  /* Ensure floating nav stays centered in RTL */
+  [dir="rtl"] .fixed.bottom-4.left-1\/2 {
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+  }
+  
+  /* Prevent navigation items from flipping in RTL */
+  [dir="rtl"] .floating-nav .flex {
+    direction: ltr;
+  }
+  
+  [dir="rtl"] .floating-nav .flex .flex {
+    direction: ltr;
+  }
+  
+  /* Keep navigation text and icons in correct order */
+  [dir="rtl"] .floating-nav span {
+    direction: ltr;
+  }
+  
+  [dir="rtl"] .floating-nav svg {
+    direction: ltr;
+  }
+  
+  /* RTL positioning utilities */
+  [dir="rtl"] .rtl-center {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  [dir="rtl"] .rtl-right {
+    right: 1rem;
+  }
+  
+  [dir="rtl"] .rtl-left {
+    left: 1rem;
+  }
+}
+
+@layer components {
+  .gradient-text {
+    @apply bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent;
+  }
+  
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-2xl hover:shadow-white/10 hover:scale-105;
+  }
+  
+  .glow-effect {
+    @apply shadow-lg shadow-white/20;
+  }
+
+  /* Mobile-optimized components */
+  .btn-mobile {
+    @apply min-h-[44px] min-w-[44px] touch-manipulation;
+  }
+
+  .text-mobile-responsive {
+    @apply text-sm sm:text-base lg:text-lg;
+  }
+
+  .text-mobile-heading {
+    @apply text-2xl sm:text-3xl lg:text-4xl xl:text-5xl;
+  }
+
+  .mobile-padding {
+    @apply px-2 sm:px-4 lg:px-8;
+  }
+
+  .grid-mobile {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8;
+  }
+
+  .backdrop-mobile {
+    @apply backdrop-blur-sm sm:backdrop-blur-lg;
+  }
+
+  .table-mobile {
+    @apply text-xs sm:text-sm;
+  }
+}
+
+@layer utilities {
+  /* Mobile-specific utilities */
+  .safe-area-inset {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Prevent zoom on input focus (iOS) */
+  .no-zoom {
+    font-size: 16px;
+  }
+
+  /* Mobile-friendly scrollbar */
+  .scrollbar-mobile {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  }
+
+  .scrollbar-mobile::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  .scrollbar-mobile::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-mobile::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+  }
+
+      .scrollbar-mobile::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.5);
+      }
+
+      /* Floating Navigation Styles */
+      .floating-nav {
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        box-shadow: 
+          0 20px 25px -5px rgba(0, 0, 0, 0.3),
+          0 10px 10px -5px rgba(0, 0, 0, 0.1),
+          0 0 0 1px rgba(255, 255, 255, 0.1),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      }
+
+      .nav-item-active {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        box-shadow: 
+          0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -1px rgba(0, 0, 0, 0.06),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      }
+
+      .nav-item-hover {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+      }
+    }
