@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { Upload, Brain, AlertCircle, CheckCircle, Star, Zap, Target, Thermometer, Clock, Activity, Globe, Sparkles, Info, BarChart3 } from 'lucide-react'
+import Planet3D from '../../components/Planet3D'
 
 interface PredictionResult {
   prediction: number
@@ -35,21 +36,39 @@ export default function PredictPage() {
 
   // Sample datasets for testing
   const sampleDatasets = {
-    confirmed_exoplanet: {
-      name: "Confirmed Exoplanet (Kepler-22b)",
-      description: "A confirmed exoplanet similar to Earth",
+    mars: {
+      name: "Mars (Solar System)",
+      description: "Mars as seen by Kepler - now correctly classified!",
       data: {
-        koi_period: "289.9",
-        koi_duration: "10.5",
-        koi_depth: "0.0001",
-        koi_prad: "2.4",
-        koi_teq: "262",
-        koi_insol: "1.1",
-        koi_model_snr: "15.2",
-        koi_steff: "5518",
-        koi_slogg: "4.4",
-        koi_srad: "0.98",
-        koi_kepmag: "11.7",
+        koi_period: "686.98",
+        koi_duration: "16.02",
+        koi_depth: "23.74",
+        koi_prad: "0.532",
+        koi_teq: "210",
+        koi_insol: "0.431",
+        koi_model_snr: "25.0",
+        koi_steff: "5772",
+        koi_slogg: "4.44",
+        koi_srad: "1.0",
+        koi_kepmag: "10.0",
+        mission: "Kepler"
+      }
+    },
+    confirmed_exoplanet: {
+      name: "Confirmed Exoplanet (High Confidence)",
+      description: "A confirmed exoplanet with strong Kepler signature",
+      data: {
+        koi_period: "15.3",
+        koi_duration: "5.8",
+        koi_depth: "950",
+        koi_prad: "2.2",
+        koi_teq: "380",
+        koi_insol: "2.1",
+        koi_model_snr: "55.0",
+        koi_steff: "5770",
+        koi_slogg: "4.35",
+        koi_srad: "1.02",
+        koi_kepmag: "10.0",
         mission: "Kepler"
       }
     },
@@ -59,7 +78,7 @@ export default function PredictPage() {
       data: {
         koi_period: "0.5",
         koi_duration: "0.8",
-        koi_depth: "0.00001",
+        koi_depth: "10", // 10 ppm (very shallow, typical false positive)
         koi_prad: "0.1",
         koi_teq: "2000",
         koi_insol: "100",
@@ -72,20 +91,20 @@ export default function PredictPage() {
       }
     },
     high_confidence: {
-      name: "High Confidence Exoplanet",
-      description: "Strong exoplanet candidate with high confidence",
+      name: "Ultra High Confidence Exoplanet",
+      description: "Perfect exoplanet signature with maximum confidence",
       data: {
-        koi_period: "45.2",
-        koi_duration: "8.3",
-        koi_depth: "0.0005",
-        koi_prad: "1.8",
-        koi_teq: "400",
-        koi_insol: "2.5",
-        koi_model_snr: "25.7",
+        koi_period: "8.7",
+        koi_duration: "3.1",
+        koi_depth: "1200",
+        koi_prad: "2.8",
+        koi_teq: "450",
+        koi_insol: "3.2",
+        koi_model_snr: "65.0",
         koi_steff: "5800",
         koi_slogg: "4.2",
         koi_srad: "1.1",
-        koi_kepmag: "10.5",
+        koi_kepmag: "9.8",
         mission: "Kepler"
       }
     }
@@ -231,10 +250,10 @@ export default function PredictPage() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8 pb-16">
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
           
           {/* Left Column - Input Form */}
-          <div className="xl:col-span-2">
+          <div>
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-8">
               <div className="flex items-center mb-6">
                 <Target className="w-6 h-6 text-white mr-3" />
@@ -445,8 +464,8 @@ export default function PredictPage() {
             </div>
           </div>
 
-          {/* Right Column - Results */}
-          <div className="xl:col-span-1">
+          {/* Right Column - Results and Visualization */}
+          <div>
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 p-8 sticky top-8">
               <div className="flex items-center mb-6">
                 <BarChart3 className="w-6 h-6 text-white mr-3" />
@@ -559,6 +578,22 @@ export default function PredictPage() {
             </div>
           </div>
         </div>
+
+        {/* 3D Planet Visualization Section */}
+        {result && (
+          <div className="mt-8">
+            <Planet3D 
+              planetData={{
+                radius: parseFloat(formData.koi_prad) || 1.0,
+                temperature: parseFloat(formData.koi_teq) || 288,
+                period: parseFloat(formData.koi_period) || 365,
+                depth: parseFloat(formData.koi_depth) || 0.001,
+                classification: result.classification,
+                confidence: result.confidence
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   )

@@ -1,24 +1,29 @@
 import sys
 import os
+import json
+
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-import json
-from lib.predictor import predictor
+from lib.mission_agnostic_predictor import mission_agnostic_predictor
 
 def main():
     try:
-        # Set API mode to suppress print statements
-        predictor._api_mode = True
-        
-        # Read input from stdin
+        mission_agnostic_predictor._api_mode = True
         input_data = json.loads(sys.stdin.read())
         
-        # Make prediction
-        result = predictor.predict(input_data)
+        # Map input features to mission-agnostic names
+        mapped_input_data = {}
+        feature_mapping = mission_agnostic_predictor.feature_mapping
         
-        # Output result
+        for key, value in input_data.items():
+            if key in feature_mapping:
+                mapped_input_data[feature_mapping[key]] = value
+            else:
+                mapped_input_data[key] = value
+        
+        result = mission_agnostic_predictor.predict(mapped_input_data)
         print(json.dumps(result))
-        
+
     except Exception as e:
         error_result = {
             "error": str(e),

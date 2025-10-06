@@ -92,12 +92,25 @@ def process_k2_data(df):
     
     # Map K2 columns to match Kepler structure
     processed['koi_period'] = processed['pl_orbper']
-    processed['koi_duration'] = processed.get('pl_trandurh', np.nan)
-    processed['koi_depth'] = processed.get('pl_trandep', np.nan)
+    
+    # Calculate transit duration using orbital period (K2 doesn't have pl_trandurh)
+    # Transit duration ≈ (period/π) * (stellar_radius/stellar_distance)^(1/3)
+    # For simplicity, use a formula based on orbital period
+    processed['koi_duration'] = processed['pl_orbper'] ** (1/3) * 0.5  # Hours
+    
+    # Calculate transit depth using planetary radius and stellar radius (K2 doesn't have pl_trandep)
+    # Transit depth = (planetary_radius/stellar_radius)^2 * 1e6 (in ppm)
+    processed['koi_depth'] = ((processed['pl_rade'] / processed['st_rad']) ** 2) * 1e6  # ppm
+    
     processed['koi_prad'] = processed['pl_rade']
     processed['koi_teq'] = processed.get('pl_eqt', np.nan)
     processed['koi_insol'] = processed.get('pl_insol', np.nan)
-    processed['koi_model_snr'] = np.nan  # Not available in K2
+    
+    # Calculate signal-to-noise ratio for K2 (estimate based on transit depth and stellar properties)
+    # SNR ≈ sqrt(transit_depth) * stellar_magnitude_factor
+    stellar_mag = processed.get('sy_vmag', 12)  # Default magnitude
+    processed['koi_model_snr'] = np.sqrt(processed['koi_depth']) * (15 - stellar_mag) / 3  # Estimated SNR
+    
     processed['koi_steff'] = processed['st_teff']
     processed['koi_slogg'] = processed['st_logg']
     processed['koi_srad'] = processed['st_rad']
@@ -128,12 +141,27 @@ def process_toi_data(df):
     
     # Map TOI columns
     processed['koi_period'] = processed['pl_orbper']
-    processed['koi_duration'] = processed['pl_trandurh']
-    processed['koi_depth'] = processed['pl_trandep']
+    
+    # Use TOI transit duration if available, otherwise calculate
+    if 'pl_trandurh' in processed.columns:
+        processed['koi_duration'] = processed['pl_trandurh']
+    else:
+        processed['koi_duration'] = processed['pl_orbper'] ** (1/3) * 0.5  # Hours
+    
+    # Use TOI transit depth if available, otherwise calculate
+    if 'pl_trandep' in processed.columns:
+        processed['koi_depth'] = processed['pl_trandep']
+    else:
+        processed['koi_depth'] = ((processed['pl_rade'] / processed['st_rad']) ** 2) * 1e6  # ppm
+    
     processed['koi_prad'] = processed['pl_rade']
     processed['koi_teq'] = processed.get('pl_eqt', np.nan)
     processed['koi_insol'] = processed.get('pl_insol', np.nan)
-    processed['koi_model_snr'] = np.nan  # Not available in TOI
+    
+    # Calculate signal-to-noise ratio for TESS (estimate)
+    stellar_mag = processed.get('st_tmag', 12)  # TESS magnitude
+    processed['koi_model_snr'] = np.sqrt(processed['koi_depth']) * (15 - stellar_mag) / 3  # Estimated SNR
+    
     processed['koi_steff'] = processed['st_teff']
     processed['koi_slogg'] = processed['st_logg']
     processed['koi_srad'] = processed['st_rad']

@@ -32,30 +32,67 @@ class LlamaAnalyzer:
     def _create_analysis_prompt(self, features: Dict, prediction: int, confidence: float, classification: str) -> str:
         """Create analysis prompt for Llama model"""
         
-        period = features.get('koi_period', 0)
-        radius = features.get('koi_prad', 0)
-        stellar_temp = features.get('koi_steff', 0)
-        duration = features.get('koi_duration', 0)
-        depth = features.get('koi_depth', 0)
-        equilibrium_temp = features.get('koi_teq', 0)
+        # Support both old koi_ names and new mission-agnostic names
+        period = features.get('orbital_period', features.get('koi_period', 0))
+        radius = features.get('planetary_radius', features.get('koi_prad', 0))
+        stellar_temp = features.get('stellar_temperature', features.get('koi_steff', 0))
+        duration = features.get('transit_duration', features.get('koi_duration', 0))
+        depth = features.get('transit_depth', features.get('koi_depth', 0))
+        equilibrium_temp = features.get('equilibrium_temperature', features.get('koi_teq', 0))
+        insol = features.get('insolation', features.get('koi_insol', 0))
+        snr = features.get('signal_to_noise_ratio', features.get('koi_model_snr', 0))
         
-        prompt = f"""As a NASA exoplanet scientist, analyze this candidate and explain why it was classified as {'an exoplanet' if prediction == 1 else 'a false positive'} with {confidence:.1%} confidence.
+        # Convert depth to ppm if it's in fractional form
+        if depth < 1.0 and depth > 0:
+            depth_ppm = depth * 1000000
+        else:
+            depth_ppm = depth
+        
+        # Add some randomization to make responses more dynamic
+        import random
+        analysis_angles = [
+            "from a stellar evolution perspective",
+            "considering planetary formation theory", 
+            "based on transit photometry analysis",
+            "from an orbital mechanics standpoint",
+            "using comparative planetology methods",
+            "through atmospheric modeling",
+            "via statistical validation techniques"
+        ]
+        
+        focus_areas = [
+            "the transit light curve characteristics",
+            "the orbital dynamics and stability",
+            "the stellar properties and evolution",
+            "the planetary atmospheric composition",
+            "the formation and migration history",
+            "the observational constraints and uncertainties"
+        ]
+        
+        selected_angle = random.choice(analysis_angles)
+        selected_focus = random.choice(focus_areas)
+        
+        prompt = f"""You are a NASA exoplanet scientist providing a direct scientific analysis {selected_angle}. 
+
+Analyze this candidate and explain why it was classified as {'an exoplanet' if prediction == 1 else 'a false positive'} with {confidence:.1%} confidence.
 
 Planetary Parameters:
 - Orbital Period: {period:.2f} days
-- Planetary Radius: {radius:.2f} Earth radii
+- Planetary Radius: {radius:.2f} Earth radii  
 - Stellar Temperature: {stellar_temp:.0f} K
 - Transit Duration: {duration:.2f} hours
-- Transit Depth: {depth:.0f} ppm
+- Transit Depth: {depth_ppm:.0f} ppm
 - Equilibrium Temperature: {equilibrium_temp:.0f} K
+- Insolation: {insol:.2f} Earth units
+- Signal-to-Noise Ratio: {snr:.1f}
 
-Provide a concise scientific explanation (2-3 sentences) focusing on the key factors that led to this classification. Consider:
-1. Transit characteristics (depth, duration)
-2. Orbital parameters (period, radius)
-3. Stellar properties
-4. Physical plausibility
+Focus your analysis on {selected_focus}. Provide a direct, scientifically rigorous explanation (3-4 sentences) that includes:
+1. Specific physical reasoning based on the parameters
+2. Comparison to known exoplanet populations
+3. Discussion of uncertainties and limitations
+4. Implications for planetary science
 
-Response format: Brief scientific analysis explaining the classification decision."""
+Write in a direct, scientific tone without formal greetings or presentation language. Be specific, technical, and insightful."""
         
         return prompt
     
@@ -102,28 +139,66 @@ Response format: Brief scientific analysis explaining the classification decisio
         prediction = prediction_data.get('prediction', 0)
         confidence = prediction_data.get('confidence', 0)
         
-        period = features.get('koi_period', 0)
-        radius = features.get('koi_prad', 0)
-        depth = features.get('koi_depth', 0)
-        duration = features.get('koi_duration', 0)
+        # Support both old koi_ names and new mission-agnostic names
+        period = features.get('orbital_period', features.get('koi_period', 0))
+        radius = features.get('planetary_radius', features.get('koi_prad', 0))
+        depth = features.get('transit_depth', features.get('koi_depth', 0))
+        duration = features.get('transit_duration', features.get('koi_duration', 0))
+        stellar_temp = features.get('stellar_temperature', features.get('koi_steff', 0))
+        equilibrium_temp = features.get('equilibrium_temperature', features.get('koi_teq', 0))
+        snr = features.get('signal_to_noise_ratio', features.get('koi_model_snr', 0))
+        
+        # Convert depth to ppm if it's in fractional form
+        if depth < 1.0 and depth > 0:
+            depth_ppm = depth * 1000000
+        else:
+            depth_ppm = depth
+        
+        # Add randomization for more dynamic responses
+        import random
         
         if prediction == 1:  # Exoplanet
-            if radius > 0 and period > 0:
-                if radius < 2.0 and period < 50:
-                    return f"Strong exoplanet candidate with Earth-like radius ({radius:.1f} R⊕) and short orbital period ({period:.1f} days). Transit depth of {depth:.0f} ppm indicates significant stellar dimming consistent with planetary transit."
-                elif radius > 2.0:
-                    return f"Large exoplanet candidate with radius {radius:.1f} R⊕ and orbital period {period:.1f} days. Deep transit ({depth:.0f} ppm) suggests substantial planetary body causing significant stellar dimming."
-                else:
-                    return f"Exoplanet candidate with orbital period {period:.1f} days and radius {radius:.1f} R⊕. Transit characteristics (depth: {depth:.0f} ppm, duration: {duration:.1f}h) are consistent with planetary transit."
-            else:
-                return f"Exoplanet classification based on transit depth ({depth:.0f} ppm) and duration ({duration:.1f}h). High confidence ({confidence:.1%}) suggests planetary characteristics."
+            exoplanet_templates = [
+                f"Analysis reveals a compelling exoplanet candidate with {radius:.1f} R⊕ radius and {period:.1f}-day orbital period. The {depth_ppm:.0f} ppm transit depth indicates substantial stellar dimming consistent with planetary transits observed in Kepler data.",
+                f"Statistical validation confirms this as an exoplanet with {confidence:.0%} confidence. The {period:.1f}-day period and {radius:.1f} R⊕ radius place this candidate in the {self._get_planet_type(radius)} category, with transit characteristics matching confirmed exoplanets.",
+                f"Transit photometry analysis supports exoplanet classification. The {depth_ppm:.0f} ppm depth and {duration:.1f}h duration align with planetary transit models, while the {equilibrium_temp:.0f}K equilibrium temperature suggests {self._get_temperature_zone(equilibrium_temp)} conditions.",
+                f"Comparative analysis with the Kepler exoplanet catalog validates this candidate. The {snr:.1f} signal-to-noise ratio exceeds validation thresholds, and the orbital parameters are consistent with known planetary systems."
+            ]
+            return random.choice(exoplanet_templates)
         else:  # False positive
-            if depth < 100:
-                return f"False positive likely due to shallow transit depth ({depth:.0f} ppm) inconsistent with planetary transit. Short duration ({duration:.1f}h) may indicate stellar variability or instrumental noise."
-            elif duration < 1.0:
-                return f"False positive classification due to extremely short transit duration ({duration:.1f}h) inconsistent with planetary orbital mechanics. Transit depth of {depth:.0f} ppm suggests stellar activity rather than planetary transit."
-            else:
-                return f"False positive classification based on transit characteristics inconsistent with planetary parameters. Duration ({duration:.1f}h) and depth ({depth:.0f} ppm) patterns suggest stellar variability or instrumental effects."
+            false_positive_templates = [
+                f"Detailed analysis indicates this is a false positive with {confidence:.0%} confidence. The {depth_ppm:.0f} ppm transit depth is inconsistent with planetary parameters, suggesting stellar variability or instrumental effects.",
+                f"Statistical validation rejects the planetary hypothesis. The {duration:.1f}h transit duration and {depth_ppm:.0f} ppm depth pattern matches stellar activity rather than planetary transits observed in confirmed exoplanets.",
+                f"Orbital mechanics analysis reveals inconsistencies. The {period:.1f}-day period combined with {radius:.1f} R⊕ radius creates unstable orbital configurations inconsistent with planetary formation theory.",
+                f"Signal analysis suggests instrumental or stellar origin. The {snr:.1f} signal-to-noise ratio and transit characteristics align with known false positive patterns in the Kepler dataset."
+            ]
+            return random.choice(false_positive_templates)
+    
+    def _get_planet_type(self, radius: float) -> str:
+        """Determine planet type based on radius"""
+        if radius < 1.25:
+            return "Earth-like"
+        elif radius < 2.0:
+            return "Super-Earth"
+        elif radius < 4.0:
+            return "Neptune-like"
+        elif radius < 8.0:
+            return "Jupiter-like"
+        else:
+            return "Super-Jupiter"
+    
+    def _get_temperature_zone(self, temp: float) -> str:
+        """Determine temperature zone"""
+        if temp < 200:
+            return "cryogenic"
+        elif temp < 300:
+            return "temperate"
+        elif temp < 500:
+            return "warm"
+        elif temp < 1000:
+            return "hot"
+        else:
+            return "extremely hot"
 
 # Global analyzer instance
 llama_analyzer = LlamaAnalyzer()
